@@ -55,12 +55,12 @@ is_directed(g::MetaGraph) = false
 
 weighttype(g::MetaGraph{T,U}) where T where U = U
 function props(g::MetaGraph, _e::SimpleEdge)
-    e = LightGraphs.is_ordered(_e) ? _e : reverse(_e)
+    e = Graphs.is_ordered(_e) ? _e : reverse(_e)
     get(PropDict, g.eprops, e)
 end
 
 function set_props!(g::MetaGraph, _e::SimpleEdge, d::Dict)
-    e = LightGraphs.is_ordered(_e) ? _e : reverse(_e)
+    e = Graphs.is_ordered(_e) ? _e : reverse(_e)
     if has_edge(g, e)
         if !_hasdict(g, e)
             g.eprops[e] = d

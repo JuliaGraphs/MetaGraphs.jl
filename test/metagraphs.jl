@@ -1,5 +1,5 @@
 using MetaGraphs
-import LightGraphs: SimpleGraphs
+import Graphs: SimpleGraphs
 import Base64:
         stringmime
 
@@ -32,8 +32,8 @@ import Base64:
         @test eltype(@inferred(MetaGraph{UInt8,Float16}(mg))) == UInt8
         @test weighttype(@inferred(MetaGraph{UInt8,Float16}(mg))) == Float16
 
-        @test @inferred(MetaGraphs.fadj(mg, 2)) == LightGraphs.SimpleGraphs.fadj(g, 2)
-        @test @inferred(MetaGraphs.badj(mg, 2)) == LightGraphs.SimpleGraphs.badj(g, 2)
+        @test @inferred(MetaGraphs.fadj(mg, 2)) == Graphs.SimpleGraphs.fadj(g, 2)
+        @test @inferred(MetaGraphs.badj(mg, 2)) == Graphs.SimpleGraphs.badj(g, 2)
 
         @test @inferred(edgetype(mg)) == edgetype(mg.graph)
 
@@ -88,8 +88,8 @@ import Base64:
         @test eltype(@inferred(MetaDiGraph{UInt8,Float16}(mg))) == UInt8
         @test weighttype(@inferred(MetaDiGraph{UInt8,Float16}(mg))) == Float16
 
-        @test @inferred(MetaGraphs.fadj(mg, 2)) == LightGraphs.SimpleGraphs.fadj(g, 2)
-        @test @inferred(MetaGraphs.badj(mg, 2)) == LightGraphs.SimpleGraphs.badj(g, 2)
+        @test @inferred(MetaGraphs.fadj(mg, 2)) == Graphs.SimpleGraphs.fadj(g, 2)
+        @test @inferred(MetaGraphs.badj(mg, 2)) == Graphs.SimpleGraphs.badj(g, 2)
 
         @test @inferred(edgetype(mg)) == edgetype(mg.graph)
 
