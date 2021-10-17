@@ -1,8 +1,8 @@
-using LightGraphs
+using Graphs
 using MetaGraphs
 using Test
 
-import LightGraphs.SimpleGraphs: SimpleGraph, SimpleDiGraph
+import Graphs.SimpleGraphs: SimpleGraph, SimpleDiGraph
 
 const testdir = @__DIR__
 

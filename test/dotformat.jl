@@ -1,6 +1,6 @@
 using MetaGraphs
 using Test
-using LightGraphs
+using Graphs
 
 property_set=[
     (src="thirty",dst="inf",color="missing",penwidth="missing",style="missing",),

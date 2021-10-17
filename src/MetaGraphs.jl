@@ -1,5 +1,5 @@
 module MetaGraphs
-using LightGraphs
+using Graphs
 using JLD2
 
 import Base:
@@ -9,7 +9,7 @@ import Base:
 import Random:
     randstring, seed!
 
-import LightGraphs:
+import Graphs:
     AbstractGraph, src, dst, edgetype, nv,
     ne, vertices, edges, is_directed,
     add_vertex!, add_edge!, rem_vertex!, rem_edge!,
@@ -19,7 +19,7 @@ import LightGraphs:
     loadgraph, savegraph, AbstractGraphFormat,
     reverse
 
-import LightGraphs.SimpleGraphs:
+import Graphs.SimpleGraphs:
     AbstractSimpleGraph, SimpleGraph, SimpleDiGraph,
     SimpleEdge, fadj, badj
 
@@ -194,7 +194,7 @@ MetaWeights(g::AbstractMetaGraph) = MetaWeights{eltype(g),eltype(g.defaultweight
 
 function getindex(w::MetaWeights{T,U}, u::Integer, v::Integer)::U where T <: Integer where U <: Real
     _e = Edge(u, v)
-    e = !w.directed && !LightGraphs.is_ordered(_e) ? reverse(_e) : _e
+    e = !w.directed && !Graphs.is_ordered(_e) ? reverse(_e) : _e
     !haskey(w.eprops, e) && return w.defaultweight
     return U(get(w.eprops[e], w.weightfield, w.defaultweight))
 end

@@ -4,9 +4,7 @@
 [![Codecov branch][codecov-img]][codecov-url]
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/MetaGraphs.jl/latest)
 
-**Project Status:** As of 8 October 2021 MetaGraphs is no longer under active development. It will remain available on Github at [sbromberger/MetaGraphs.jl](https://github.com/sbromberger/MetaGraphs.jl). The JuliaGraphs organization will continue to maintain packages that use MetaGraphs and transition development over the long term.
-
-[LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl) graphs with arbitrary metadata.
+[MetaGraphs.jl](https://github.com/JuliaGraphs/MetaGraphs.jl) graphs with arbitrary metadata.
 
 [build-img]: https://github.com/JuliaGraphs/Metagraphs.jl/workflows/CI/badge.svg?branch=master
 [build-url]: https://github.com/JuliaGraphs/Metagraphs.jl/actions?query=workflow%3ACI
@@ -25,7 +23,7 @@ add MetaGraphs
 
 ## Example Usage
 ```julia
-julia> using LightGraphs, MetaGraphs
+julia> using Graphs, MetaGraphs
 
 # create a standard simplegraph
 julia> g = path_graph(5)
@@ -87,7 +85,7 @@ Dict{Symbol,Any} with 0 entries
 julia> props(mg, 2)
 Dict{Symbol,Any} with 0 entries
 
-# all LightGraphs analytics work
+# all Graphs.jl analytics work
 julia> betweenness_centrality(mg)
 5-element Array{Float64,1}:
  0.0
