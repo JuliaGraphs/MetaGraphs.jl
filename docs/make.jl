@@ -13,11 +13,11 @@ makedocs(
     pages = Any[
         "Overview"             => "index.md",
         "MetaGraphs Functions" => "metagraphs.md",
-        "License Information"  => "license.md"
+        "License Information"  => "license.md",
     ],
 )
 
-deploydocs(repo="github.com/JuliaGraphs/Metagraphs.jl.git", push_preview=true)
+deploydocs(repo="github.com/JuliaGraphs/MetaGraphs.jl.git", push_preview=true)
 
 rm(normpath(@__FILE__, "../src/index.md"))
 rm(normpath(@__FILE__, "../src/license.md"))
