@@ -2,7 +2,7 @@
 
 [![Build Status][build-img]][build-url]
 [![Codecov branch][codecov-img]][codecov-url]
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/MetaGraphs.jl/latest)
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.org/MetaGraphs.jl/dev/)
 
 [MetaGraphs.jl](https://github.com/JuliaGraphs/MetaGraphs.jl) graphs with arbitrary metadata.
 
