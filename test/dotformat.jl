@@ -3,35 +3,35 @@ using Test
 using Graphs
 
 property_set=[
-    (src="thirty",dst="inf",color="missing",penwidth="missing",style="missing",),
-    (src="twenty",dst="mort",color="missing",penwidth="missing",style="missing",),
-    (src="rate",dst="personper",color="missing",penwidth="missing",style="missing",),
-    (src="person",dst="unit",color="missing",penwidth="missing",style="missing",),
-    (src="personper",dst="unit",color="missing",penwidth="missing",style="missing",),
-    (src="second",dst="unit",color="missing",penwidth="missing",style="missing",),
-    (src="dollars",dst="unit",color="missing",penwidth="missing",style="missing",),
-    (src="dGDP",dst="prices",color="missing",penwidth="missing",style="missing",),
-    (src="prices",dst="regres",color="missing",penwidth="missing",style="missing",),
-    (src="fed",dst="dGDP",color="missing",penwidth="missing",style="missing",),
-    (src="ode",dst="epi",color="missing",penwidth="missing",style="missing",),
-    (src="dollars",dst="cost",color="missing",penwidth="missing",style="missing",),
-    (src="mort",dst="rate",color="black",penwidth="2.0",style="dashed",),
-    (src="inf",dst="rate",color="black",penwidth="2.0",style="dashed",),
-    (src="birth",dst="rate",color="black",penwidth="2.0",style="dashed",),
-    (src="mort",dst="ind",color="orange",penwidth="4.0",style="solid",),
-    (src="ind",dst="epi",color="orange",penwidth="4.0",style="solid",),
-    (src="ind",dst="epi",color="orange",penwidth="4.0",style="solid",),
-    (src="inf",dst="ind",color="orange",penwidth="4.0",style="solid",),
-    (src="birth",dst="ind",color="orange",penwidth="4.0",style="solid",),
-    (src="temp",dst="inf",color="orange",penwidth="4.0",style="solid",),
-    (src="age",dst="mort",color="orange",penwidth="4.0",style="solid",),
-    (src="demo",dst="birth",color="orange",penwidth="4.0",style="solid",),
-    (src="epi",dst="cases",color="orange",penwidth="4.0",style="solid",),
-    (src="cases",dst="regres",color="orange",penwidth="4.0",style="solid",),
-    (src="weather",dst="temp",color="orange",penwidth="4.0",style="solid",),
-    (src="demo",dst="age",color="orange",penwidth="4.0",style="solid",),
-    (src="regres",dst="cost",color="orange",penwidth="4.0",style="solid",),
-    (src="html",dst="fed",color="black",penwidth="2.0",style="solid",)
+    (src="thirty",dst="inf",color="missing",penwidth="missing",style="missing",label=""),
+    (src="twenty",dst="mort",color="missing",penwidth="missing",style="missing",label="",),
+    (src="rate",dst="personper",color="missing",penwidth="missing",style="missing",label="",),
+    (src="person",dst="unit",color="missing",penwidth="missing",style="missing",label="",),
+    (src="personper",dst="unit",color="missing",penwidth="missing",style="missing",label="",),
+    (src="second",dst="unit",color="missing",penwidth="missing",style="missing",label="",),
+    (src="dollars",dst="unit",color="missing",penwidth="missing",style="missing",label="",),
+    (src="dGDP",dst="prices",color="missing",penwidth="missing",style="missing",label="",),
+    (src="prices",dst="regres",color="missing",penwidth="missing",style="missing",label="",),
+    (src="fed",dst="dGDP",color="missing",penwidth="missing",style="missing",label="",),
+    (src="ode",dst="epi",color="missing",penwidth="missing",style="missing",label="",),
+    (src="dollars",dst="cost",color="missing",penwidth="missing",style="missing",label="",),
+    (src="mort",dst="rate",color="black",penwidth="2.0",style="dashed",label="",),
+    (src="inf",dst="rate",color="black",penwidth="2.0",style="dashed",label="",),
+    (src="birth",dst="rate",color="black",penwidth="2.0",style="dashed",label="",),
+    (src="mort",dst="ind",color="orange",penwidth="4.0",style="solid",label="cause",),
+    (src="ind",dst="epi",color="orange",penwidth="4.0",style="solid",label="two words",),
+    (src="ind",dst="epi",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="inf",dst="ind",color="orange",penwidth="4.0",style="solid",label="one, other",),
+    (src="birth",dst="ind",color="orange",penwidth="4.0",style="solid",label="one, other, and third one",),
+    (src="temp",dst="inf",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="age",dst="mort",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="demo",dst="birth",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="epi",dst="cases",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="cases",dst="regres",color="orange",penwidth="4.0",style="solid",label="with single \" here",),
+    (src="weather",dst="temp",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="demo",dst="age",color="orange",penwidth="4.0",style="solid",label="",),
+    (src="regres",dst="cost",color="orange",penwidth="4.0",style="solid",label="with \"quoted\" word",),
+    (src="html",dst="fed",color="black",penwidth="2.0",style="solid",label="",)
 ]
 
 # name, label, color
@@ -53,7 +53,7 @@ vprops = [
     ("birth","Birth\\nRate","#66AA55"),
     ("twenty","0.2 Persons/s","#DD1133"),
     ("thirty","0.3 Persons/s","#DD1133"),
-    ("ind","Individual\\nContact\\nModel","#5DADE2"),
+    ("ind","Individual\\n\"Contact\"\\nModel","#5DADE2"),
     ("temp","Temperature","#5DADE2"),
     ("age","Age","#5DADE2"),
     ("dGDP","Economic Growth","#5DADE2"),
@@ -79,17 +79,18 @@ set_indexing_prop!(g, :name)
 # add edges
 for prop in property_set
     src, dst = g[prop.src, :name], g[prop.dst, :name]
-    add_edge!(g, src,dst)
+    add_edge!(g, src, dst)
     set_prop!(g, src, dst, :color, prop.color)
     set_prop!(g, src, dst, :penwidth, prop.penwidth)
     set_prop!(g, src, dst, :style, prop.style)
+    set_prop!(g, src, dst, :label, prop.label)
 end
 
 # set global edge properties
 for e in edges(g)
     set_prop!(g, e, :dir, :none)
 end
-# set global vertex properties 
+# set global vertex properties
 for v in vertices(g)
     set_prop!(g, v, :shape, :record)
     set_prop!(g, v, :style, :filled)
@@ -112,7 +113,7 @@ end
     #   - <...>     : OK
     #   - both      : NOK ("< or >" as bounding characters, resulting HTML in file will not be parsed correctly by dot.)
     quote_regex = r"label\s*=\s*\"(?:[^\"\\]|\\.)*\"" # source: https://stackoverflow.com/questions/249791/regex-for-quoted-string-with-escaping-quotes
-    html_regex = r"label\s*=\s*<.*>" 
+    html_regex = r"label\s*=\s*<.*>"
     invalid_quote_regex = r"label\s*=\s*\"<(?:[^\"\\]|\\.)*>\""
     for line in eachline(fp)
             test_val = false
@@ -126,7 +127,7 @@ end
                 # no worries, proper HTML surrounding brackets found.
                 test_val = true
             end
-        @test test_val 
+        @test test_val
     end
 end
 
