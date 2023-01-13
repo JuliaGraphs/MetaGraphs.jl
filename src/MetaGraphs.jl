@@ -300,12 +300,16 @@ end
 
 function set_props!(g::AbstractMetaGraph, v::Integer, d::Dict)
     if has_vertex(g, v)
-        if length(intersect(keys(d), g.indices)) != 0
-            error("The following properties are indexing_props and cannot be updated: $(intersect(keys(d), g.indices))")
-        elseif !_hasdict(g, v)
+        for (prop,val) in d
+            index_available(g, v, prop, val) || error("':$prop' index already contains $val")
+        end
+        if !_hasdict(g, v)
             g.vprops[v] = d
         else
             merge!(g.vprops[v], d)
+        end
+        for prop in intersect(keys(d), g.indices) 
+            g.metaindex[prop][d[prop]] = v
         end
         return true
     end
@@ -368,6 +372,17 @@ function default_index_value(v::Integer, prop::Symbol, index_values::Set{Any}; e
     return val
 end
 
+"""
+    index_available(g, v, prop, val)
+
+Check whether `prop` with `val` is available to be used as indexing for node `v`.
+First check whether `prop` is already an index. If not, check whether `val`
+already appears as an index in any node. If not, finally check whether `prop`
+and `val` indeed describe a property of node `v`.
+"""
+function index_available(g::AbstractMetaGraph, v::Integer, prop::Symbol, val::Any)
+    !in(prop, g.indices) || !haskey(g.metaindex[prop], val) || (haskey(g.vprops, v) && haskey(g.vprops[v], prop) && g.vprops[v][prop] == val)
+end
 """
     set_indexing_prop!(g, prop)
     set_indexing_prop!(g, v, prop, val)

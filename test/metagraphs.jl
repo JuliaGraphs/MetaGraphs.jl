@@ -470,8 +470,27 @@ end
     @test_throws ErrorException set_indexing_prop!(dG, 4, :name, "dgnode_3")
     @test_throws ErrorException set_prop!(G, 4, :name, "gnode_3")
     @test_throws ErrorException set_prop!(dG, 4, :name, "dgnode_3")
-    @test_throws ErrorException set_props!(G, 5, Dict(:name => "name", :other_name => "something"))
-    @test_throws ErrorException set_props!(dG, 5, Dict(:name => "name", :other_name => "something"))
+
+    @test MetaGraphs.index_available(G, 7, :name, "gnode_8") == false
+    @test MetaGraphs.index_available(G, 7, :name, "gnode_7") == true
+    @test MetaGraphs.index_available(G, 7, :another_prop, "gnode_8") == true
+    @test MetaGraphs.index_available(G, 7, :name, "gnode_8-anothername") == true
+
+    @test MetaGraphs.index_available(dG, 7, :name, "dgnode_8") == false
+    @test MetaGraphs.index_available(dG, 7, :name, "dgnode_7") == true
+    @test MetaGraphs.index_available(dG, 7, :another_prop, "dgnode_8") == true
+    @test MetaGraphs.index_available(dG, 7, :name, "dgnode_8-anothername") == true
+
+    @test_throws ErrorException set_props!(G, 11, Dict(:name => "gnode_3", :other_name => "something11"))
+    @test_throws ErrorException set_props!(dG,11, Dict(:name => "dgnode_3", :other_name => "something11"))
+    @test_throws KeyError get_prop(G, 11, :other_name)
+    @test_throws KeyError get_prop(dG, 11, :other_name)
+
+    @test set_props!(G, 5, Dict(:name => "name5", :other_name => "something"))
+    @test set_props!(dG, 5, Dict(:name => "dname5", :other_name => "something"))
+    @test G["name5", :name] == 5
+    @test dG["dname5", :name] == 5
+
 
     @info("Ignore \"'foo1' is already in index\" warnings")
     set_indexing_prop!(G, 50, :name, "another name")
