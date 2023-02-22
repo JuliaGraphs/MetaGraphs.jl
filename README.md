@@ -12,7 +12,7 @@
 [codecov-url]: http://codecov.io/github/JuliaGraphs/Metagraphs.jl?branch=master
 
 ## Documentation
-Full documentation is available at [GitHub Pages](https://juliagraphs.github.io/MetaGraphs.jl/latest).
+Full documentation is available on the [JuliaGraphs site](https://juliagraphs.org/MetaGraphs.jl/dev/).
 Documentation for methods is also available via the Julia REPL help system.
 
 ## Installation
