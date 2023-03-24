@@ -253,20 +253,33 @@ props(g::AbstractMetaGraph, v::Integer) = get(PropDict, g.vprops, v)
 props(g::AbstractMetaGraph, u::Integer, v::Integer) = props(g, Edge(u, v))
 
 """
-    get_prop(g, prop)
-    get_prop(g, v, prop)
-    get_prop(g, e, prop)
-    get_prop(g, s, d, prop)
+    get_prop(g, prop::Symbol)
+    get_prop(g, prop::Symbol, default)
+
+    get_prop(g, v, prop::Symbol)
+    get_prop(g, v, prop::Symbol, default)
+
+    get_prop(g, e, prop::Symbol)
+    get_prop(g, e, prop::Symbol, default)
+    get_prop(g, s, d, prop::Symbol)
+    get_prop(g, s, d, prop::Symbol, default)
 
 Return the property `prop` defined for graph `g`, vertex `v`, or edge `e`
 (optionally referenced by source vertex `s` and destination vertex `d`).
-If property is not defined, return an error.
+Use the version with `default`, to return a default value if the property is not defined. Otherwise, it will return an error.
 """
 get_prop(g::AbstractMetaGraph, prop::Symbol) = props(g)[prop]
+get_prop(g::AbstractMetaGraph, prop::Symbol, default) = has_prop(g, prop) ? get_prop(g, prop) : default
+
 get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol) = props(g, v)[prop]
+get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol, default) = has_prop(g, v, prop) ? get_prop(g, v, prop) : default
+
 get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol) = props(g, e)[prop]
+get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol, default) = has_prop(g, e, prop) ? get_prop(g, e, prop) : default
 
 get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol) = get_prop(g, Edge(u, v), prop)
+get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol, default) = has_prop(g, u, v, prop) ? get_prop(g, u, v, prop) : default
+
 
 """
     has_prop(g, prop)

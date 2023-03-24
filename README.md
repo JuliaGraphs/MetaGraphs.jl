@@ -72,6 +72,10 @@ Dict{Symbol,Any} with 2 entries:
 julia> get_prop(mg, 2, :name)
 "John"
 
+# set a default value to return in case the property does not exist
+julia> get_prop(mg, 2, :nonexistent_prop, "default value")
+"default value"
+
 # delete a specific property
 julia> rem_prop!(mg, 1, :name)
 Dict{Symbol,Any} with 1 entry:

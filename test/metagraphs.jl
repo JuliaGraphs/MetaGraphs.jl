@@ -78,6 +78,32 @@ import Base64:
         U = @inferred(weighttype(mg))
         @test @inferred(nv(MetaGraph{T,U}(6))) == 6
 
+        # get_prop with default argument
+        # vertices
+        set_prop!(mg, nv(mg), :testprop, "exists")
+        @test get_prop(mg, nv(mg), :testprop, "nonexistent") == "exists"
+        @test get_prop(mg, nv(mg), :testprop_nonexist, "nonexistent") == "nonexistent"
+        @test get_prop(mg, nv(mg) + 100, :testprop_nonexist, "nonexistent") == "nonexistent"
+
+        # edges
+        set_prop!(mg, 1, 2, :testedgeprop, "5 meters")
+        @test get_prop(mg, 1, 2, :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, 1, 2, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 4, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        @test get_prop(mg, Edge(1, 2), :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, Edge(1, 2), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 4), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        # graph
+        set_prop!(mg, :testgraphpprop, "linegraph")
+        @test get_prop(mg, :testgraphpprop, "circlegraph") == "linegraph"
+        @test get_prop(mg, :testgraphpprop_nonexist, "circlegraph") == "circlegraph"
+
     end
 
     for g in testdigraphs(dgx)
@@ -135,6 +161,32 @@ import Base64:
         T = @inferred(eltype(mg))
         U = @inferred(weighttype(mg))
         @test @inferred(nv(MetaDiGraph{T,U}(6))) == 6
+
+        # get_prop with default argument
+        # vertices
+        set_prop!(mg, nv(mg), :testprop, "exists")
+        @test get_prop(mg, nv(mg), :testprop, "nonexistent") == "exists"
+        @test get_prop(mg, nv(mg), :testprop_nonexist, "nonexistent") == "nonexistent"
+        @test get_prop(mg, nv(mg) + 100, :testprop_nonexist, "nonexistent") == "nonexistent"
+
+        # edges
+        set_prop!(mg, 1, 2, :testedgeprop, "5 meters")
+        @test get_prop(mg, 1, 2, :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, 1, 2, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 4, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        @test get_prop(mg, Edge(1, 2), :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, Edge(1, 2), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 4), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        # graph
+        set_prop!(mg, :testgraphpprop, "linegraph")
+        @test get_prop(mg, :testgraphpprop, "circlegraph") == "linegraph"
+        @test get_prop(mg, :testgraphpprop_nonexist, "circlegraph") == "circlegraph"
     end
 
     for gbig in [SimpleGraph(0xff), SimpleDiGraph(0xff)]
