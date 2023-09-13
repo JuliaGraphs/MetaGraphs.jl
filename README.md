@@ -1,27 +1,26 @@
 # MetaGraphs
 
-[![Build Status][build-img]][build-url]
-[![Codecov branch][codecov-img]][codecov-url]
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.org/MetaGraphs.jl/dev/)
+[![Stable docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliagraphs.org/MetaGraphs.jl/)
+[![Dev docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliagraphs.org/MetaGraphs.jl/dev/)
+[![Build Status](https://github.com/JuliaGraphs/Metagraphs.jl/workflows/CI/badge.svg?branch=master)](https://github.com/JuliaGraphs/Metagraphs.jl/actions?query=workflow%3ACI)
+[![Codecov](http://codecov.io/github/JuliaGraphs/Metagraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaGraphs/Metagraphs.jl?branch=master)
 
-[MetaGraphs.jl](https://github.com/JuliaGraphs/MetaGraphs.jl) graphs with arbitrary metadata.
+A flexible package for graphs with arbitrary metadata.
 
-[build-img]: https://github.com/JuliaGraphs/Metagraphs.jl/workflows/CI/badge.svg?branch=master
-[build-url]: https://github.com/JuliaGraphs/Metagraphs.jl/actions?query=workflow%3ACI
-[codecov-img]: http://codecov.io/github/JuliaGraphs/Metagraphs.jl/coverage.svg?branch=master
-[codecov-url]: http://codecov.io/github/JuliaGraphs/Metagraphs.jl?branch=master
+> For a more performant option, check out [MetaGraphsNext.jl](https://github.com/JuliaGraphs/MetaGraphsNext.jl)
 
-## Documentation
-Full documentation is available at [GitHub Pages](https://juliagraphs.github.io/MetaGraphs.jl/latest).
-Documentation for methods is also available via the Julia REPL help system.
+## Getting started
 
-## Installation
 Installation is straightforward: from the Julia `pkg` prompt,
 ```julia
-add MetaGraphs
+pkg> add MetaGraphs
 ```
 
-## Example Usage
+Full documentation is available [here](https://juliagraphs.org/MetaGraphs.jl/).
+Documentation for methods is also available via the Julia REPL help system.
+
+## Example use
+
 ```julia
 julia> using Graphs, MetaGraphs
 
