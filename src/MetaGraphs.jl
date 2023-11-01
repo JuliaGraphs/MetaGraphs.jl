@@ -74,7 +74,7 @@ has_vertex(g::AbstractMetaGraph, x...) = has_vertex(g.graph, x...)
 inneighbors(g::AbstractMetaGraph, v::Integer) = inneighbors(g.graph, v)
 outneighbors(g::AbstractMetaGraph, v::Integer) = fadj(g.graph, v)
 
-issubset(g::T, h::T) where T <: AbstractMetaGraph = issubset(g.graph, h.graph)
+issubset(g::T, h::T) where {T<:AbstractMetaGraph} = issubset(g.graph, h.graph)
 
 """
     add_edge!(g, u, v, s, val)
@@ -135,10 +135,10 @@ function rem_vertex!(g::AbstractMetaGraph, v::Integer)
     lasteoutprops = Dict(n => props(g, lastv, n) for n in outneighbors(g, lastv))
     lasteinprops = Dict(n => props(g, n, lastv) for n in inneighbors(g, lastv))
     for ind in g.indices
-        if haskey(props(g,lastv),ind)
+        if haskey(props(g, lastv), ind)
             pop!(g.metaindex[ind], get_prop(g, lastv, ind))
         end
-        if haskey(props(g,v),ind)
+        if haskey(props(g, v), ind)
             v != lastv && pop!(g.metaindex[ind], get_prop(g, v, ind))
         end
     end
@@ -191,7 +191,7 @@ function rem_vertex!(g::AbstractMetaGraph, v::Integer)
     return true
 end
 
-struct MetaWeights{T <: Integer,U <: Real} <: AbstractMatrix{U}
+struct MetaWeights{T<:Integer,U<:Real} <: AbstractMatrix{U}
     n::T
     weightfield::Symbol
     defaultweight::U
@@ -203,7 +203,7 @@ show(io::IO, z::MIME"text/plain", x::MetaWeights) = show(io, x)
 
 MetaWeights(g::AbstractMetaGraph) = MetaWeights{eltype(g),eltype(g.defaultweight)}(nv(g), g.weightfield, g.defaultweight, g.eprops, is_directed(g))
 
-function getindex(w::MetaWeights{T,U}, u::Integer, v::Integer)::U where T <: Integer where U <: Real
+function getindex(w::MetaWeights{T,U}, u::Integer, v::Integer)::U where {T<:Integer} where {U<:Real}
     _e = Edge(u, v)
     e = !w.directed && !Graphs.is_ordered(_e) ? reverse(_e) : _e
     !haskey(w.eprops, e) && return w.defaultweight
@@ -272,13 +272,25 @@ get_prop(g::AbstractMetaGraph, prop::Symbol) = props(g)[prop]
 get_prop(g::AbstractMetaGraph, prop::Symbol, default) = has_prop(g, prop) ? get_prop(g, prop) : default
 
 get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol) = props(g, v)[prop]
-get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol, default) = has_prop(g, v, prop) ? get_prop(g, v, prop) : default
+function get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol, default)
+    if has_vertex(g, v)
+        return has_prop(g, v, prop) ? get_prop(g, v, prop) : default
+    else
+        throw(ArgumentError("Vertex $v not in graph"))
+    end
+end
 
 get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol) = props(g, e)[prop]
-get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol, default) = has_prop(g, e, prop) ? get_prop(g, e, prop) : default
+function get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol, default)
+    if has_edge(g, e)
+        has_prop(g, e, prop) ? get_prop(g, e, prop) : default
+    else
+        throw(ArgumentError("$e not in graph"))
+    end
+end
 
 get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol) = get_prop(g, Edge(u, v), prop)
-get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol, default) = has_prop(g, u, v, prop) ? get_prop(g, u, v, prop) : default
+get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol, default) = get_prop(g, Edge(u, v), prop, default)
 
 
 """
@@ -313,7 +325,7 @@ end
 
 function set_props!(g::AbstractMetaGraph, v::Integer, d::Dict)
     if has_vertex(g, v)
-        for (prop,val) in d
+        for (prop, val) in d
             index_available(g, v, prop, val) || error("':$prop' index already contains $val")
         end
         if !_hasdict(g, v)
@@ -321,7 +333,7 @@ function set_props!(g::AbstractMetaGraph, v::Integer, d::Dict)
         else
             merge!(g.vprops[v], d)
         end
-        for prop in intersect(keys(d), g.indices) 
+        for prop in intersect(keys(d), g.indices)
             g.metaindex[prop][d[prop]] = v
         end
         return true
@@ -330,7 +342,7 @@ function set_props!(g::AbstractMetaGraph, v::Integer, d::Dict)
 end
 # set_props!(g::AbstractMetaGraph, e::SimpleEdge, d::Dict) is dependent on directedness.
 
-set_props!(g::AbstractMetaGraph{T}, u::Integer, v::Integer, d::Dict) where T = set_props!(g, Edge(T(u), T(v)), d)
+set_props!(g::AbstractMetaGraph{T}, u::Integer, v::Integer, d::Dict) where {T} = set_props!(g, Edge(T(u), T(v)), d)
 
 """
     set_prop!(g, prop, val)
@@ -352,7 +364,7 @@ set_prop!(g::AbstractMetaGraph, v::Integer, prop::Symbol, val) = begin
 end
 set_prop!(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol, val) = set_props!(g, e, Dict(prop => val))
 
-set_prop!(g::AbstractMetaGraph{T}, u::Integer, v::Integer, prop::Symbol, val) where T = set_prop!(g, Edge(T(u), T(v)), prop, val)
+set_prop!(g::AbstractMetaGraph{T}, u::Integer, v::Integer, prop::Symbol, val) where {T} = set_prop!(g, Edge(T(u), T(v)), prop, val)
 
 """
     rem_prop!(g, prop)
@@ -368,7 +380,7 @@ rem_prop!(g::AbstractMetaGraph, prop::Symbol) = delete!(g.gprops, prop)
 rem_prop!(g::AbstractMetaGraph, v::Integer, prop::Symbol) = delete!(g.vprops[v], prop)
 rem_prop!(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol) = delete!(g.eprops[e], prop)
 
-rem_prop!(g::AbstractMetaGraph{T}, u::Integer, v::Integer, prop::Symbol) where T = rem_prop!(g, Edge(T(u), T(v)), prop)
+rem_prop!(g::AbstractMetaGraph{T}, u::Integer, v::Integer, prop::Symbol) where {T} = rem_prop!(g, Edge(T(u), T(v)), prop)
 
 """
     default_index_value(v, prop, index_values; exclude=nothing)
@@ -429,7 +441,7 @@ function set_indexing_prop!(g::AbstractMetaGraph, v::Integer, prop::Symbol, val:
     haskey(g.metaindex[prop], val) && error("':$prop' index already contains $val")
 
     if !haskey(g.vprops, v)
-        push!(g.vprops, v=>Dict{Symbol,Any}())
+        push!(g.vprops, v => Dict{Symbol,Any}())
     end
     if haskey(g.vprops[v], prop)
         delete!(g.metaindex[prop], g.vprops[v][prop])
@@ -451,7 +463,7 @@ clear_props!(g::AbstractMetaGraph, v::Integer) = _hasdict(g, v) && delete!(g.vpr
 clear_props!(g::AbstractMetaGraph, e::SimpleEdge) = _hasdict(g, e) && delete!(g.eprops, e)
 clear_props!(g::AbstractMetaGraph) = g.gprops = PropDict()
 
-clear_props!(g::AbstractMetaGraph{T}, u::Integer, v::Integer) where T = clear_props!(g, Edge(T(u), T(v)))
+clear_props!(g::AbstractMetaGraph{T}, u::Integer, v::Integer) where {T} = clear_props!(g, Edge(T(u), T(v)))
 
 """
     weightfield!(g, prop)
@@ -527,7 +539,7 @@ filter_vertices(g::AbstractMetaGraph, prop::Symbol) =
 filter_vertices(g::AbstractMetaGraph, prop::Symbol, val) =
     filter_vertices(g, (g, x) -> has_prop(g, x, prop) && get_prop(g, x, prop) == val)
 
-function _copy_props!(oldg::T, newg::T, vmap) where T <: AbstractMetaGraph
+function _copy_props!(oldg::T, newg::T, vmap) where {T<:AbstractMetaGraph}
     for (newv, oldv) in enumerate(vmap)
         p = props(oldg, oldv)
         if !isempty(p)
@@ -553,21 +565,21 @@ function _copy_props!(oldg::T, newg::T, vmap) where T <: AbstractMetaGraph
     return nothing
 end
 
-function induced_subgraph(g::T, v::AbstractVector{U}) where T <: AbstractMetaGraph where U <: Integer
+function induced_subgraph(g::T, v::AbstractVector{U}) where {T<:AbstractMetaGraph} where {U<:Integer}
     inducedgraph, vmap = induced_subgraph(g.graph, v)
     newg = T(inducedgraph)
     _copy_props!(g, newg, vmap)
     return newg, vmap
 end
 
-function induced_subgraph(g::T, v::AbstractVector{U}) where T <: AbstractMetaGraph where U <: SimpleEdge
+function induced_subgraph(g::T, v::AbstractVector{U}) where {T<:AbstractMetaGraph} where {U<:SimpleEdge}
     inducedgraph, vmap = induced_subgraph(g.graph, v)
     newg = T(inducedgraph)
     _copy_props!(g, newg, vmap)
     return newg, vmap
 end
 
-induced_subgraph(g::T, filt::Iterators.Filter) where T <: AbstractMetaGraph =
+induced_subgraph(g::T, filt::Iterators.Filter) where {T<:AbstractMetaGraph} =
     induced_subgraph(g, collect(filt))
 
 # TODO - would be nice to be able to apply a function to properties. Not sure
@@ -576,7 +588,7 @@ induced_subgraph(g::T, filt::Iterators.Filter) where T <: AbstractMetaGraph =
 
 ==(x::AbstractMetaGraph, y::AbstractMetaGraph) = x.graph == y.graph
 
-copy(g::T) where T <: AbstractMetaGraph = deepcopy(g)
+copy(g::T) where {T<:AbstractMetaGraph} = deepcopy(g)
 
 include("metadigraph.jl")
 include("metagraph.jl")
