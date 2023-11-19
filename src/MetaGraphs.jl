@@ -269,25 +269,13 @@ Return the property `prop` defined for graph `g`, vertex `v`, or edge `e`
 Use the version with `default`, to return a default value if the property is not defined. Otherwise, it will return an error.
 """
 get_prop(g::AbstractMetaGraph, prop::Symbol) = props(g)[prop]
-get_prop(g::AbstractMetaGraph, prop::Symbol, default) = has_prop(g, prop) ? get_prop(g, prop) : default
+get_prop(g::AbstractMetaGraph, prop::Symbol, default) = get(props(g), prop, default)
 
 get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol) = props(g, v)[prop]
-function get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol, default)
-    if has_vertex(g, v)
-        return has_prop(g, v, prop) ? get_prop(g, v, prop) : default
-    else
-        throw(ArgumentError("Vertex $v not in graph"))
-    end
-end
+get_prop(g::AbstractMetaGraph, v::Integer, prop::Symbol, default) = get(props(g, v), prop, default)
 
 get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol) = props(g, e)[prop]
-function get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol, default)
-    if has_edge(g, e)
-        has_prop(g, e, prop) ? get_prop(g, e, prop) : default
-    else
-        throw(ArgumentError("$e not in graph"))
-    end
-end
+get_prop(g::AbstractMetaGraph, e::SimpleEdge, prop::Symbol, default) = get(props(g, e), prop, default)
 
 get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol) = get_prop(g, Edge(u, v), prop)
 get_prop(g::AbstractMetaGraph, u::Integer, v::Integer, prop::Symbol, default) = get_prop(g, Edge(u, v), prop, default)
