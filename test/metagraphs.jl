@@ -1,7 +1,7 @@
 using MetaGraphs
 import Graphs: SimpleGraphs
 import Base64:
-        stringmime
+    stringmime
 
 
 @testset "MetaGraphs" begin
@@ -21,7 +21,7 @@ import Base64:
     mg = MetaGraph()
     @test add_vertex!(mg, :color, "red") && get_prop(mg, nv(mg), :color) == "red"
     @test add_vertex!(mg, Dict(:color => "red", :prop2 => "prop2")) && props(mg, nv(mg)) == Dict(:color => "red", :prop2 => "prop2")
-    @test add_edge!(mg, 1, 2, :color, "blue") && get_prop(mg, 1, 2, :color) ==  "blue"
+    @test add_edge!(mg, 1, 2, :color, "blue") && get_prop(mg, 1, 2, :color) == "blue"
     @test add_vertex!(mg) && add_edge!(mg, 1, 3, Dict(:color => "red", :prop2 => "prop2")) && props(mg, 1, 3) == Dict(:color => "red", :prop2 => "prop2")
 
     for g in testgraphs(gx)
@@ -78,6 +78,31 @@ import Base64:
         U = @inferred(weighttype(mg))
         @test @inferred(nv(MetaGraph{T,U}(6))) == 6
 
+        # get_prop with default argument
+        # vertices
+        set_prop!(mg, nv(mg), :testprop, "exists")
+        @test get_prop(mg, nv(mg), :testprop, "nonexistent") == "exists"
+        @test get_prop(mg, nv(mg), :testprop_nonexist, "nonexistent") == "nonexistent"
+        @test get_prop(mg, nv(mg) + 100, :testprop_nonexist, "nonexistent") == "nonexistent"
+
+        # edges
+        set_prop!(mg, 1, 2, :testedgeprop, "5 meters")
+        @test get_prop(mg, 1, 2, :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, 1, 2, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 4, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        @test get_prop(mg, Edge(1, 2), :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, Edge(1, 2), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 4), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        # graph
+        set_prop!(mg, :testgraphpprop, "linegraph")
+        @test get_prop(mg, :testgraphpprop, "circlegraph") == "linegraph"
+        @test get_prop(mg, :testgraphpprop_nonexist, "circlegraph") == "circlegraph"
     end
 
     for g in testdigraphs(dgx)
@@ -135,6 +160,32 @@ import Base64:
         T = @inferred(eltype(mg))
         U = @inferred(weighttype(mg))
         @test @inferred(nv(MetaDiGraph{T,U}(6))) == 6
+
+        # get_prop with default argument
+        # vertices
+        set_prop!(mg, nv(mg), :testprop, "exists")
+        @test get_prop(mg, nv(mg), :testprop, "nonexistent") == "exists"
+        @test get_prop(mg, nv(mg), :testprop_nonexist, "nonexistent") == "nonexistent"
+        @test get_prop(mg, nv(mg) + 100, :testprop_nonexist, "nonexistent") == "nonexistent"
+
+        # edges
+        set_prop!(mg, 1, 2, :testedgeprop, "5 meters")
+        @test get_prop(mg, 1, 2, :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, 1, 2, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 4, :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop, "0 meters") == "0 meters"
+        @test get_prop(mg, 2, 1, :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        @test get_prop(mg, Edge(1, 2), :testedgeprop, "0 meters") == "5 meters"
+        @test get_prop(mg, Edge(1, 2), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 4), :testedgeprop_nonexist, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop, "0 meters") == "0 meters"
+        @test get_prop(mg, Edge(2, 1), :testedgeprop_nonexist, "0 meters") == "0 meters"
+
+        # graph
+        set_prop!(mg, :testgraphpprop, "linegraph")
+        @test get_prop(mg, :testgraphpprop, "circlegraph") == "linegraph"
+        @test get_prop(mg, :testgraphpprop_nonexist, "circlegraph") == "circlegraph"
     end
 
     for gbig in [SimpleGraph(0xff), SimpleDiGraph(0xff)]
@@ -299,7 +350,7 @@ import Base64:
     @test weightfield!(mg, :weight) == :weight
     @test enumerate_paths(dijkstra_shortest_paths(mg, 1), 3) == [1, 2, 3]
 
-    @test set_props!(mg, 1, 2,  Dict(:color => :blue, :action => "knows"))
+    @test set_props!(mg, 1, 2, Dict(:color => :blue, :action => "knows"))
     @test length(props(mg, 1, 2)) == 3
     @test rem_edge!(mg, 1, 2)
     @test length(props(mg, 1, 2)) == 0
@@ -352,12 +403,12 @@ import Base64:
     for v in vertices(mga)
         set_prop!(mga, v, :name, string(v))
     end
-    set_indexing_prop!(mga,:name)
+    set_indexing_prop!(mga, :name)
     @test get_prop(mga, 1, :name) == "1"
     @test get_prop(mga, 5, :name) == "5"
     @test rem_vertex!(mga, 1)
     @test get_prop(mga, 1, :name) == "5"
-    @test mga["5",:name] == 1
+    @test mga["5", :name] == 1
     @test isempty(props(mga, 5))
 
     # test for #22
@@ -373,19 +424,19 @@ import Base64:
 
     # test for #72 - Multiple indicies that are not all used
     let
-        test_graph = x-> begin
-            g=MetaGraph()
-            set_indexing_prop!(g,:IndexA)
-            set_indexing_prop!(g,:IndexB)
-            add_vertex!(g,:IndexA,"A")
-            x && add_vertex!(g,:IndexA,"B")
-            x && set_indexing_prop!(g,nv(g),:IndexB,"B")
-            add_vertex!(g,:IndexB,"C")
+        test_graph = x -> begin
+            g = MetaGraph()
+            set_indexing_prop!(g, :IndexA)
+            set_indexing_prop!(g, :IndexB)
+            add_vertex!(g, :IndexA, "A")
+            x && add_vertex!(g, :IndexA, "B")
+            x && set_indexing_prop!(g, nv(g), :IndexB, "B")
+            add_vertex!(g, :IndexB, "C")
             g
         end
-        mga=test_graph(true)
-        rem_vertex!(mga,2)
-        @test mga==test_graph(false)
+        mga = test_graph(true)
+        rem_vertex!(mga, 2)
+        @test mga == test_graph(false)
     end
 
     mga = MetaDiGraph(path_digraph(4))
@@ -482,7 +533,7 @@ end
     @test MetaGraphs.index_available(dG, 7, :name, "dgnode_8-anothername") == true
 
     @test_throws ErrorException set_props!(G, 11, Dict(:name => "gnode_3", :other_name => "something11"))
-    @test_throws ErrorException set_props!(dG,11, Dict(:name => "dgnode_3", :other_name => "something11"))
+    @test_throws ErrorException set_props!(dG, 11, Dict(:name => "dgnode_3", :other_name => "something11"))
     @test_throws KeyError get_prop(G, 11, :other_name)
     @test_throws KeyError get_prop(dG, 11, :other_name)
 
