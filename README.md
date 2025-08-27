@@ -2,7 +2,7 @@
 
 [![Stable docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliagraphs.org/MetaGraphs.jl/)
 [![Dev docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliagraphs.org/MetaGraphs.jl/dev/)
-[![Build Status](https://github.com/JuliaGraphs/Metagraphs.jl/workflows/CI/badge.svg?branch=master)](https://github.com/JuliaGraphs/Metagraphs.jl/actions?query=workflow%3ACI)
+[![Build status](https://github.com/JuliaGraphs/Metagraphs.jl/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/JuliaGraphs/Metagraphs.jl/actions/workflows/ci.yml?query=branch%3Amaster)
 [![Codecov](http://codecov.io/github/JuliaGraphs/Metagraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaGraphs/Metagraphs.jl?branch=master)
 
 A flexible package for graphs with arbitrary metadata.
