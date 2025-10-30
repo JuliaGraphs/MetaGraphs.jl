@@ -1,6 +1,5 @@
 module MetaGraphs
 using Graphs
-using JLD2
 
 import Base:
     eltype, show, ==, Pair,

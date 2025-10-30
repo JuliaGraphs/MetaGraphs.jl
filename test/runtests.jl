@@ -1,5 +1,7 @@
 using Graphs
 using MetaGraphs
+
+using JLD2
 using Test
 
 import Graphs.SimpleGraphs: SimpleGraph, SimpleDiGraph
