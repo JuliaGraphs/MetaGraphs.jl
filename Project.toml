@@ -15,7 +15,7 @@ MetaGraphsJLD2Ext = ["Graphs", "JLD2"]
 [compat]
 Graphs = "1.4"
 JLD2 = "0.1.11, 0.2, 0.3, 0.4, 0.5, 0.6"
-julia = "1"
+julia = "1.10"
 
 [extras]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
