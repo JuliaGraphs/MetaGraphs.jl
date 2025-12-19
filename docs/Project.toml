@@ -4,3 +4,4 @@ MetaGraphs = "626554b9-1ddb-594c-aa3c-2596fe9399a5"
 
 [compat]
 Documenter = "0.27"
+MetaGraphs = "0.8.1"
