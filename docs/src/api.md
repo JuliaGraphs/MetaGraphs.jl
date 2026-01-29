@@ -1,4 +1,4 @@
-# MetaGraphs
+# API reference
 Metadata for graphs is stored as a series of named key-value pairs, with the
 key being an instance of type `Symbol` and the value being any type. The following methods are available for MetaGraphs:
 
@@ -10,4 +10,11 @@ Pages   = [
     "metadigraph.jl"
 ]
 Private = false
+```
+
+```@docs
+MetaGraphs.index_available
+MetaGraphs.default_index_value
+add_vertex!
+add_edge!
 ```

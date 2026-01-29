@@ -1,4 +1,6 @@
-using Documenter, MetaGraphs
+using Documenter
+using Graphs
+using MetaGraphs
 
 # index is equal to the README for the time being
 cp(normpath(@__FILE__, "../../README.md"), normpath(@__FILE__, "../src/index.md"); force=true)
@@ -12,7 +14,7 @@ makedocs(
     format = Documenter.HTML(prettyurls=get(ENV, "CI", nothing) == "true"),
     pages = Any[
         "Overview"             => "index.md",
-        "MetaGraphs Functions" => "metagraphs.md",
+        "API reference"        => "api.md",
         "License Information"  => "license.md",
     ],
 )
