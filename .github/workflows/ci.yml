@@ -24,7 +24,7 @@ jobs:
             arch: x64
     steps:
       - uses: julia-actions/setup-julia@v2
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/cache@v5
         env:
           cache-name: cache-artifacts
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: julia-actions/setup-julia@v2
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           version: '1'
       - shell: bash
